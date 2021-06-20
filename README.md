@@ -1,9 +1,7 @@
-<img src="logo/logo.svg" width="92px"/>
-
 [![idea](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
-![master](https://github.com/portlek/configs/workflows/build/badge.svg)
-[![Release](https://jitpack.io/v/portlek/configs.svg)](https://jitpack.io/#portlek/configs)
+![master](https://github.com/portlek/rgb/workflows/build/badge.svg)
+[![Release](https://jitpack.io/v/portlek/rgb.svg)](https://jitpack.io/#portlek/rgb)
 
 ## How to Use
 
@@ -28,7 +26,7 @@
             <!-- Relocations(Optional)
             <relocations>
               <relocation>
-                <pattern>io.github.portlek.configs</pattern>
+                <pattern>io.github.portlek.rgb</pattern>
                 <shadedPattern>[YOUR_PLUGIN_PACKAGE].shade</shadedPattern>
               </relocation>
             </relocations>
@@ -53,73 +51,8 @@
 ```xml
 <dependencies>
   <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-gson-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-hjson-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-hocon</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-jackson-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-jackson-yaml</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-snakeyaml</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-simple-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-bukkit-transformers</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-gson-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-hjson-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-jackson-json</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-jackson-yaml</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-hocon</artifactId>
-    <version>${version}</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.portlek.configs</groupId>
-    <artifactId>configs-simple-json</artifactId>
+    <groupId>com.github.portlek</groupId>
+    <artifactId>rgb</artifactId>
     <version>${version}</version>
   </dependency>
 </dependencies>
@@ -143,23 +76,6 @@ repositories {
 
 ```groovy
 dependencies {
-    implementation("com.github.portlek.configs:configs-bukkit-transfomers:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-jackson-json:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-jackson-yaml:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-snakeyaml:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-gson-json:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-hjson-json:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-hocon:${version}")
-    implementation("com.github.portlek.configs:configs-bukkit-simple-json:${version}")
-    implementation("com.github.portlek.configs:configs-gson-json:${version}")
-    implementation("com.github.portlek.configs:configs-hjson-json:${version}")
-    implementation("com.github.portlek.configs:configs-hocon:${version}")
-    implementation("com.github.portlek.configs:configs-jackson-json:${version}")
-    implementation("com.github.portlek.configs:configs-jackson-yaml:${version}")
-    implementation("com.github.portlek.configs:configs-simple-json:${version}")
+    implementation("com.github.portlek:rgb:${version}")
 }
 ```
-
-## Supporters
-
-[![Jetbrains](logo/jetbrains.svg)](https://www.jetbrains.com/?from=configs)
