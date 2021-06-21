@@ -115,8 +115,7 @@ public final class ColorManager {
       .withGradient(HtmlGradient.INSTANCE)
       .withGradient(IridescentGradient.INSTANCE)
       .withGradient(KyoriGradient.INSTANCE);
-    colorManger.withFormatter(RainbowFormatter.of(colorManger));
-    return colorManger;
+    return colorManger.withFormatter(RainbowFormatter.of(colorManger));
   }
 
   /**
