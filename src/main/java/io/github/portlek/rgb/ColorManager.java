@@ -74,7 +74,7 @@ public final class ColorManager {
   /**
    * the custom color patterns.
    * <p>
-   * the pattern is {@literal {#color-id}}.
+   * the pattern is {@literal {#hex-code}}.
    */
   private final Map<String, String> customColorPatterns = new HashMap<>();
 
@@ -222,13 +222,13 @@ public final class ColorManager {
   /**
    * gets the color pattern.
    *
-   * @param colorId the color id to get.
+   * @param hexCode the hex code to get.
    *
    * @return color.
    */
   @NotNull
-  public Optional<String> getCustomColorPattern(@NotNull final String colorId) {
-    return Optional.ofNullable(this.customColorPatterns.get(colorId));
+  public Optional<String> getCustomColorPattern(@NotNull final String hexCode) {
+    return Optional.ofNullable(this.customColorPatterns.get(hexCode));
   }
 
   /**
@@ -260,14 +260,14 @@ public final class ColorManager {
   /**
    * registers a custom color.
    *
-   * @param id the id to register.
+   * @param hexCode the hex code to register.
    * @param color the color to register.
    *
    * @return {@code this} for builder chain.
    */
   @NotNull
-  public ColorManager withColorPattern(@NotNull final String id, @NotNull final String color) {
-    this.customColorPatterns.put(id, color);
+  public ColorManager withColorPattern(@NotNull final String hexCode, @NotNull final String color) {
+    this.customColorPatterns.put(hexCode, color);
     return this;
   }
 
@@ -313,13 +313,13 @@ public final class ColorManager {
   /**
    * unregisters a custom color.
    *
-   * @param id the id to unregister.
+   * @param hexCode the hex code to unregister.
    *
    * @return {@code this} for builder chain.
    */
   @NotNull
-  public ColorManager withoutCustomColorPattern(@NotNull final String id) {
-    this.customColorPatterns.remove(id);
+  public ColorManager withoutCustomColorPattern(@NotNull final String hexCode) {
+    this.customColorPatterns.remove(hexCode);
     return this;
   }
 
