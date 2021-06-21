@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that represent Kyori gradient applier.
  * <p>
- * the pattern is {@literal <gradient:#RRGGBB:#RRGGBB>Text</gradient>}
+ * the pattern is {@literal <gradient:#RRGGBB:#RRGGBB>Text</gradient>}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class KyoriGradient implements Gradient {
