@@ -215,4 +215,30 @@ public final class ColorManager {
     this.gradients.add(gradient);
     return this;
   }
+
+  /**
+   * unregisters the formatter.
+   *
+   * @param formatter the formatter to unregisters.
+   *
+   * @return {@code this} for builder chain.
+   */
+  @NotNull
+  public ColorManager withoutFormatter(@NotNull final Formatter formatter) {
+    this.formatters.add(formatter);
+    return this;
+  }
+
+  /**
+   * unregisters the gradient.
+   *
+   * @param gradient the gradient to unregisters.
+   *
+   * @return {@code this} for builder chain.
+   */
+  @NotNull
+  public ColorManager withoutGradient(@NotNull final Gradient gradient) {
+    this.gradients.add(gradient);
+    return this;
+  }
 }
