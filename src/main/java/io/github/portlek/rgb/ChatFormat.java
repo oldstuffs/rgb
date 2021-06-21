@@ -127,7 +127,7 @@ public enum ChatFormat {
   /**
    * the values.
    */
-  public static final ChatFormat[] values = ChatFormat.values();
+  public static final ChatFormat[] VALUES = ChatFormat.values();
 
   /**
    * the character.
@@ -211,7 +211,7 @@ public enum ChatFormat {
    */
   @NotNull
   public static Optional<ChatFormat> fromRGBExact(final int red, final int green, final int blue) {
-    return Arrays.stream(ChatFormat.values)
+    return Arrays.stream(ChatFormat.VALUES)
       .filter(format -> format.red == red && format.green == green && format.blue == blue)
       .findFirst();
   }
@@ -225,7 +225,7 @@ public enum ChatFormat {
    */
   @NotNull
   public static Optional<ChatFormat> getByChar(final char character) {
-    return Arrays.stream(ChatFormat.values)
+    return Arrays.stream(ChatFormat.VALUES)
       .filter(format -> format.character == character)
       .findFirst();
   }
@@ -273,7 +273,7 @@ public enum ChatFormat {
       return ChatFormat.WHITE;
     }
     final var c = last.toCharArray()[1];
-    return Arrays.stream(ChatFormat.values)
+    return Arrays.stream(ChatFormat.VALUES)
       .filter(e -> e.character == c)
       .findFirst()
       .orElse(ChatFormat.WHITE);

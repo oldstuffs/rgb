@@ -294,7 +294,7 @@ public final class ChatComponent {
   }
 
   /**
-   * creates a optimized chat component from the text
+   * creates a optimized chat component from the text.
    *
    * @param text the text to create.
    *
@@ -594,12 +594,13 @@ public final class ChatComponent {
   /**
    * converts component to string.
    *
+   * @param rgbSupported the rgb supported to convert..
    * @param sendTranslatableIfEmpty the send translatable if empty to convert.
    *
    * @return string.
    */
   @Nullable
-  public String toString(final boolean sendTranslatableIfEmpty) {
+  public String toString(final boolean rgbSupported, final boolean sendTranslatableIfEmpty) {
     if (this.extra == null) {
       if (this.text == null) {
         return null;
@@ -611,7 +612,7 @@ public final class ChatComponent {
         return ChatComponent.EMPTY_TEXT;
       }
     }
-    if (ColorManager.VERSION.getMinor() < 16) {
+    if (!rgbSupported) {
       this.convertColorsToLegacy();
     }
     return this.toString();

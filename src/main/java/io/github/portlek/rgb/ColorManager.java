@@ -25,7 +25,10 @@
 
 package io.github.portlek.rgb;
 
-import io.github.portlek.bukkitversion.BukkitVersion;
+import io.github.portlek.rgb.formatters.BukkitFormatter;
+import io.github.portlek.rgb.formatters.CMIFormatter;
+import io.github.portlek.rgb.formatters.HtmlFormatter;
+import io.github.portlek.rgb.formatters.UnnamedFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
@@ -35,11 +38,6 @@ import org.jetbrains.annotations.NotNull;
  * a class that represent color managers.
  */
 public final class ColorManager {
-
-  /**
-   * the version.
-   */
-  static final BukkitVersion VERSION = new BukkitVersion();
 
   /**
    * the default.
@@ -83,7 +81,11 @@ public final class ColorManager {
    */
   @NotNull
   public static ColorManager createDefault() {
-    return new ColorManager();
+    return new ColorManager()
+      .withFormatter(new BukkitFormatter())
+      .withFormatter(new CMIFormatter())
+      .withFormatter(new HtmlFormatter())
+      .withFormatter(new UnnamedFormatter());
   }
 
   /**
@@ -155,25 +157,13 @@ public final class ColorManager {
    * converts the text to bukkit format.
    *
    * @param text the text to convert.
+   * @param rgbSupported the rgb supported to convert.
    *
    * @return converted text.
    */
   @NotNull
-  public String convertToBukkitFormat(@NotNull final String text) {
-    return this.convertToBukkitFormat(text, ColorManager.VERSION.getMinor() >= 16);
-  }
-
-  /**
-   * converts the text to bukkit format.
-   *
-   * @param text the text to convert.
-   * @param rgbClient the rgb client to convert.
-   *
-   * @return converted text.
-   */
-  @NotNull
-  public String convertToBukkitFormat(@NotNull final String text, final boolean rgbClient) {
-    if (!rgbClient) {
+  public String convertToBukkitFormat(@NotNull final String text, final boolean rgbSupported) {
+    if (!rgbSupported) {
       return ChatComponent.fromColoredText(text).toLegacyText();
     }
     var replaced = this.applyFormats(text, false);

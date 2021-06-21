@@ -184,7 +184,7 @@ public final class TextColor {
     var minMaxDist = 9999.0d;
     var maxDist = 0.0d;
     var legacyColor = ChatFormat.WHITE;
-    for (final var color : ChatFormat.values) {
+    for (final var color : ChatFormat.VALUES) {
       var rDiff = color.getRed() - red;
       var gDiff = color.getGreen() - green;
       var bDiff = color.getBlue() - blue;
@@ -213,6 +213,7 @@ public final class TextColor {
   }
 
   @NotNull
+  @Override
   public String toString() {
     if (this.returnLegacy) {
       return this.getLegacyColor().toString().toLowerCase(Locale.ROOT);
