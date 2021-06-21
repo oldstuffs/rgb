@@ -179,15 +179,15 @@ public final class ColorManager {
     var replaced = this.applyFormats(text, false);
     final var matcher = ColorManager.DEFAULT_PATTERN.matcher(replaced);
     while (matcher.find()) {
-      final var hexcode = matcher.group();
+      final var hexCode = matcher.group();
       final var fixed = "&x" +
-        "&" + hexcode.charAt(1) +
-        "&" + hexcode.charAt(2) +
-        "&" + hexcode.charAt(3) +
-        "&" + hexcode.charAt(4) +
-        "&" + hexcode.charAt(5) +
-        "&" + hexcode.charAt(6);
-      replaced = replaced.replace(hexcode, fixed.replace('&', '\u00a7'));
+        "&" + hexCode.charAt(1) +
+        "&" + hexCode.charAt(2) +
+        "&" + hexCode.charAt(3) +
+        "&" + hexCode.charAt(4) +
+        "&" + hexCode.charAt(5) +
+        "&" + hexCode.charAt(6);
+      replaced = replaced.replace(hexCode, fixed.replace('&', '\u00a7'));
     }
     return replaced;
   }
