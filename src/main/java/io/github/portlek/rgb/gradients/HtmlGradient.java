@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that represent CMI-like gradient applier.
  * <p>
- * the pattern is {@literal <#RRGGBB>Text</#RRGGBB>}.
+ * the pattern is &lt;#RRGGBB&gt;Text&lt;/#RRGGBB&gt;.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HtmlGradient implements Gradient {
