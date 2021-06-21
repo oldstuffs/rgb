@@ -25,6 +25,7 @@
 
 package io.github.portlek.rgb;
 
+import java.awt.Color;
 import java.util.Locale;
 import lombok.Getter;
 import lombok.Setter;
@@ -111,16 +112,57 @@ public final class TextColor {
   }
 
   /**
-   * creates a text color.
+   * gets closest color.
    *
-   * @param legacyColor the legacy color to create.
+   * @param color the color to get.
    *
-   * @return a newly create text color.
+   * @return closest color.
    */
   @NotNull
-  public static TextColor of(@NotNull final ChatFormat legacyColor) {
-    return new TextColor(legacyColor.getRed(), legacyColor.getGreen(), legacyColor.getBlue(), legacyColor.getHexCode(),
-      legacyColor, false);
+  public static ChatFormat getClosestColor(@NotNull final Color color) {
+    return TextColor.getClosestColor(color.getRed(), color.getGreen(), color.getBlue());
+  }
+
+  /**
+   * gets closest color.
+   *
+   * @param red the red to get.
+   * @param green the green to get.
+   * @param blue the blue to get.
+   *
+   * @return closest color.
+   */
+  @NotNull
+  public static ChatFormat getClosestColor(final int red, final int green, final int blue) {
+    var minMaxDist = 9999.0d;
+    var maxDist = 0.0d;
+    var legacyColor = ChatFormat.WHITE;
+    for (final var color : ChatFormat.VALUES) {
+      var rDiff = color.getRed() - red;
+      var gDiff = color.getGreen() - green;
+      var bDiff = color.getBlue() - blue;
+      if (rDiff < 0) {
+        rDiff = -rDiff;
+      }
+      if (gDiff < 0) {
+        gDiff = -gDiff;
+      }
+      if (bDiff < 0) {
+        bDiff = -bDiff;
+      }
+      maxDist = rDiff;
+      if (gDiff > maxDist) {
+        maxDist = gDiff;
+      }
+      if (bDiff > maxDist) {
+        maxDist = bDiff;
+      }
+      if (maxDist < minMaxDist) {
+        minMaxDist = maxDist;
+        legacyColor = color;
+      }
+    }
+    return legacyColor;
   }
 
   /**
@@ -171,45 +213,28 @@ public final class TextColor {
   }
 
   /**
-   * gets closest color.
+   * creates a text color.
    *
-   * @param red the red to get.
-   * @param green the green to get.
-   * @param blue the blue to get.
+   * @param legacyColor the legacy color to create.
    *
-   * @return closest color.
+   * @return a newly create text color.
    */
   @NotNull
-  private static ChatFormat getClosestColor(final int red, final int green, final int blue) {
-    var minMaxDist = 9999.0d;
-    var maxDist = 0.0d;
-    var legacyColor = ChatFormat.WHITE;
-    for (final var color : ChatFormat.VALUES) {
-      var rDiff = color.getRed() - red;
-      var gDiff = color.getGreen() - green;
-      var bDiff = color.getBlue() - blue;
-      if (rDiff < 0) {
-        rDiff = -rDiff;
-      }
-      if (gDiff < 0) {
-        gDiff = -gDiff;
-      }
-      if (bDiff < 0) {
-        bDiff = -bDiff;
-      }
-      maxDist = rDiff;
-      if (gDiff > maxDist) {
-        maxDist = gDiff;
-      }
-      if (bDiff > maxDist) {
-        maxDist = bDiff;
-      }
-      if (maxDist < minMaxDist) {
-        minMaxDist = maxDist;
-        legacyColor = color;
-      }
-    }
-    return legacyColor;
+  public static TextColor of(@NotNull final ChatFormat legacyColor) {
+    return new TextColor(legacyColor.getRed(), legacyColor.getGreen(), legacyColor.getBlue(), legacyColor.getHexCode(),
+      legacyColor, false);
+  }
+
+  /**
+   * creates a text color.
+   *
+   * @param color the color to create.
+   *
+   * @return a newly create text color.
+   */
+  @NotNull
+  public static TextColor of(final Color color) {
+    return TextColor.of(color.getRed(), color.getGreen(), color.getBlue());
   }
 
   @NotNull

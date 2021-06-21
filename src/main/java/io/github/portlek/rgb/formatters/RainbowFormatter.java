@@ -25,54 +25,67 @@
 
 package io.github.portlek.rgb.formatters;
 
+import io.github.portlek.rgb.ColorManager;
 import io.github.portlek.rgb.Formatter;
-import io.github.portlek.rgb.Legacy;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represent Bukkit formatter.
  * <p>
- * the pattern is {@literal &x&R&R&G&G&B&B}.
+ * the pattern is &lt;rainbow000&gt;Text&lt;/rainbow&gt;.
  * <p>
- * these {@literal &} symbols can be also {@literal §}.
+ * the number is saturation.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class BukkitFormatter implements Formatter {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public final class RainbowFormatter implements Formatter {
 
   /**
    * the instance.
    */
-  public static final Formatter INSTANCE = new BukkitFormatter();
+  public static final Formatter INSTANCE = new RainbowFormatter();
 
   /**
    * the pattern.
    */
-  private static final Pattern PATTERN = Pattern.compile("[§&]x[§&{1}0-9a-fA-F]{12}");
+  private static final Pattern PATTERN = Pattern.compile("<rainbow([0-9]{1,3})>(.*?)</rainbow>");
+
+  /**
+   * the color manager.
+   */
+  @NotNull
+  private final ColorManager colorManager;
+
+  /**
+   * ctor.
+   */
+  private RainbowFormatter() {
+    this(ColorManager.getDefault());
+  }
+
+  /**
+   * creates a rainbow formatter.
+   *
+   * @param colorManager the color manager to create.
+   *
+   * @return a newly created rainbow formatter.
+   */
+  @NotNull
+  public static Formatter of(@NotNull final ColorManager colorManager) {
+    return new RainbowFormatter(colorManager);
+  }
 
   @NotNull
   @Override
   public String apply(@NotNull final String text) {
-    if (!text.contains("&") && !text.contains(Legacy.COLOR_CHAR + "x")) {
-      return text;
-    }
     var replaced = text;
-    final var matcher = BukkitFormatter.PATTERN.matcher(replaced);
+    final var matcher = RainbowFormatter.PATTERN.matcher(replaced);
     while (matcher.find()) {
-      final var hexCode = matcher.group();
-      replaced = replaced.replace(
-        hexCode,
-        new String(new char[]{
-          '#',
-          hexCode.charAt(3),
-          hexCode.charAt(5),
-          hexCode.charAt(7),
-          hexCode.charAt(9),
-          hexCode.charAt(11),
-          hexCode.charAt(13)
-        }));
+      final var saturation = matcher.group(1);
+      final var content = matcher.group(2);
+      replaced = replaced.replace(matcher.group(), this.colorManager.rainbow(content, Float.parseFloat(saturation)));
     }
     return replaced;
   }

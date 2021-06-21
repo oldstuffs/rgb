@@ -159,13 +159,27 @@ public final class ChatComponent {
    */
   @NotNull
   public static ChatComponent fromColoredText(@NotNull final String originalText) {
-    final var text = ColorManager.getDefault().applyFormats(Legacy.color(originalText), false);
+    return ChatComponent.fromColoredText(ColorManager.getDefault(), originalText);
+  }
+
+  /**
+   * creates a chat component from colored text.
+   *
+   * @param colorManager the color manager to create.
+   * @param originalText the original text to create.
+   *
+   * @return a newly created chat component from colored text.
+   */
+  @NotNull
+  public static ChatComponent fromColoredText(@NotNull final ColorManager colorManager,
+                                              @NotNull final String originalText) {
+    final var text = colorManager.applyFormats(Legacy.color(originalText), false);
     final var components = new ArrayList<ChatComponent>();
     var builder = new StringBuilder();
     var component = new ChatComponent();
     for (var i = 0; i < text.length(); i++) {
       var c = text.charAt(i);
-      if (c == '\u00a7') {
+      if (c == Legacy.COLOR_CHAR) {
         i++;
         if (i >= text.length()) {
           break;
@@ -302,7 +316,7 @@ public final class ChatComponent {
    */
   @NotNull
   public static ChatComponent optimizedComponent(@NotNull final String text) {
-    if (text.contains("#") || text.contains("&x") || text.contains('\u00a7' + "x")) {
+    if (text.contains("#") || text.contains("&x") || text.contains(Legacy.COLOR_CHAR + "x")) {
       return ChatComponent.fromColoredText(text);
     }
     return new ChatComponent(text);
