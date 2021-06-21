@@ -73,7 +73,7 @@ public final class RainbowFormatter implements Formatter {
    * @return a newly created rainbow formatter.
    */
   @NotNull
-  public static RainbowFormatter of(@NotNull final ColorManager colorManager) {
+  public static Formatter of(@NotNull final ColorManager colorManager) {
     return new RainbowFormatter(colorManager);
   }
 
