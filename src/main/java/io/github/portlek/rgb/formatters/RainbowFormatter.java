@@ -56,7 +56,7 @@ public final class RainbowFormatter implements Formatter {
    * the color manager.
    */
   @NotNull
-  private final ColorManager colorManager;
+  private ColorManager colorManager;
 
   /**
    * ctor.
@@ -88,5 +88,18 @@ public final class RainbowFormatter implements Formatter {
       replaced = replaced.replace(matcher.group(), this.colorManager.rainbow(content, Float.parseFloat(saturation)));
     }
     return replaced;
+  }
+
+  /**
+   * sets the color manager.
+   *
+   * @param colorManager the color manager to set.
+   *
+   * @return {@code this} for builder chain.
+   */
+  @NotNull
+  public RainbowFormatter withColorManager(@NotNull final ColorManager colorManager) {
+    this.colorManager = colorManager;
+    return this;
   }
 }
