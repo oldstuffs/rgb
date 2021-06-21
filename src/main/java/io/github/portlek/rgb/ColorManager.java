@@ -67,6 +67,8 @@ public final class ColorManager {
 
   /**
    * the colors.
+   * <p>
+   * the pattern is {@literal {#color-id}}.
    */
   private final Map<String, String> colors = new HashMap<>();
 
