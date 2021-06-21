@@ -22,30 +22,7 @@
  * SOFTWARE.
  *
  */
-
-package io.github.portlek.rgb.formatters;
-
-import io.github.portlek.rgb.Formatter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-
 /**
- * a class that represent unnamed formatter.
- * <p>
- * the pattern is {@literal &#RRGGBB}.
+ * the package that contains gradients.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class UnnamedFormatter implements Formatter {
-
-  /**
-   * the instance.
-   */
-  public static final Formatter INSTANCE = new UnnamedFormatter();
-
-  @NotNull
-  @Override
-  public String apply(@NotNull final String text) {
-    return text.contains("&#") ? text.replace("&#", "#") : text;
-  }
-}
+package io.github.portlek.rgb.gradients;

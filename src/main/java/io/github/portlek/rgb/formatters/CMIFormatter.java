@@ -27,6 +27,8 @@ package io.github.portlek.rgb.formatters;
 
 import io.github.portlek.rgb.Formatter;
 import java.util.regex.Pattern;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,7 +36,13 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * the pattern is {@literal {#RRGGBB}}.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CMIFormatter implements Formatter {
+
+  /**
+   * the instance.
+   */
+  public static final Formatter INSTANCE = new CMIFormatter();
 
   /**
    * the pattern.

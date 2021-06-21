@@ -29,6 +29,10 @@ import io.github.portlek.rgb.formatters.BukkitFormatter;
 import io.github.portlek.rgb.formatters.CMIFormatter;
 import io.github.portlek.rgb.formatters.HtmlFormatter;
 import io.github.portlek.rgb.formatters.UnnamedFormatter;
+import io.github.portlek.rgb.gradients.CMIGradient;
+import io.github.portlek.rgb.gradients.HtmlGradient;
+import io.github.portlek.rgb.gradients.IridescentGradient;
+import io.github.portlek.rgb.gradients.KyoriGradient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
@@ -82,10 +86,14 @@ public final class ColorManager {
   @NotNull
   public static ColorManager createDefault() {
     return new ColorManager()
-      .withFormatter(new BukkitFormatter())
-      .withFormatter(new CMIFormatter())
-      .withFormatter(new HtmlFormatter())
-      .withFormatter(new UnnamedFormatter());
+      .withFormatter(BukkitFormatter.INSTANCE)
+      .withFormatter(CMIFormatter.INSTANCE)
+      .withFormatter(HtmlFormatter.INSTANCE)
+      .withFormatter(UnnamedFormatter.INSTANCE)
+      .withGradient(CMIGradient.INSTANCE)
+      .withGradient(HtmlGradient.INSTANCE)
+      .withGradient(IridescentGradient.INSTANCE)
+      .withGradient(KyoriGradient.INSTANCE);
   }
 
   /**
@@ -96,6 +104,10 @@ public final class ColorManager {
   @NotNull
   public static ColorManager getDefault() {
     return ColorManager.DEFAULT;
+  }
+
+  public static void main(final String[] args) {
+    System.out.println(ChatComponent.fromColoredText("<#123456>Text</#654321>"));
   }
 
   /**
