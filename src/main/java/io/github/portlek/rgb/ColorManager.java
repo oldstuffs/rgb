@@ -106,10 +106,6 @@ public final class ColorManager {
     return ColorManager.DEFAULT;
   }
 
-  public static void main(final String[] args) {
-    System.out.println(ChatComponent.fromColoredText("<#123456>Text</#654321>"));
-  }
-
   /**
    * applies the formats to the text.
    *

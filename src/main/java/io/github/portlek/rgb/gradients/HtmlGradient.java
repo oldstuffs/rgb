@@ -23,12 +23,12 @@ public final class HtmlGradient implements Gradient {
   /**
    * the pattern.
    */
-  private static final Pattern PATTERN = Pattern.compile("\\{#[0-9a-fA-F]{6}>}[^{]*\\{#[0-9a-fA-F]{6}<}");
+  private static final Pattern PATTERN = Pattern.compile("<#[0-9a-fA-F]{6}>[^<]*</#[0-9a-fA-F]{6}>");
 
   @NotNull
   @Override
   public String apply(@NotNull final String text, @NotNull final Boolean ignorePlaceholders) {
-    if (!text.contains("{#")) {
+    if (!text.contains("<#")) {
       return text;
     }
     var replaced = text;
@@ -39,8 +39,8 @@ public final class HtmlGradient implements Gradient {
         continue;
       }
       final var start = TextColor.of(format.substring(1, 8));
-      final var message = format.substring(10, format.length() - 10);
-      final var end = TextColor.of(format.substring(format.length() - 9, format.length() - 2));
+      final var message = format.substring(9, format.length() - 10);
+      final var end = TextColor.of(format.substring(format.length() - 8, format.length() - 1));
       final var applied = Gradient.asGradient(start, message, end);
       replaced = replaced.replace(format, applied);
     }
