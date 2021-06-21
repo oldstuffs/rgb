@@ -35,9 +35,9 @@ import io.github.portlek.rgb.gradients.HtmlGradient;
 import io.github.portlek.rgb.gradients.IridescentGradient;
 import io.github.portlek.rgb.gradients.KyoriGradient;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -75,12 +75,12 @@ public final class ColorManager {
   /**
    * the formatters.
    */
-  private final Collection<Formatter> formatters = new ArrayList<>();
+  private final Collection<Formatter> formatters = new HashSet<>();
 
   /**
    * the gradients.
    */
-  private final Collection<Gradient> gradients = new ArrayList<>();
+  private final Collection<Gradient> gradients = new HashSet<>();
 
   /**
    * the rgb supported.
