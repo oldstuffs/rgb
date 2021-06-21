@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -63,14 +64,19 @@ public final class ColorManager {
   /**
    * the special colors.
    */
-  private static final Collection<String> SPECIAL_COLORS = Set.of("&l", "&n", "&o", "&k", "&m");
+  private static final Collection<ChatFormat> SPECIAL_COLORS = Set.of(
+    ChatFormat.BOLD,
+    ChatFormat.UNDERLINE,
+    ChatFormat.ITALIC,
+    ChatFormat.OBFUSCATED,
+    ChatFormat.STRIKETHROUGH);
 
   /**
-   * the colors.
+   * the custom color patterns.
    * <p>
    * the pattern is {@literal {#color-id}}.
    */
-  private final Map<String, String> colors = new HashMap<>();
+  private final Map<String, String> customColorPatterns = new HashMap<>();
 
   /**
    * the formatters.
@@ -214,6 +220,18 @@ public final class ColorManager {
   }
 
   /**
+   * gets the color pattern.
+   *
+   * @param colorId the color id to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public Optional<String> getCustomColorPattern(@NotNull final String colorId) {
+    return Optional.ofNullable(this.customColorPatterns.get(colorId));
+  }
+
+  /**
    * rainbows the text.
    *
    * @param text the text to rainbow.
@@ -226,9 +244,10 @@ public final class ColorManager {
     var rainbow = text;
     final var builder = new StringBuilder();
     for (final var color : ColorManager.SPECIAL_COLORS) {
-      if (rainbow.contains(color)) {
+      final var chatFormat = color.getChatFormat();
+      if (rainbow.contains(chatFormat)) {
         builder.append(color);
-        rainbow = rainbow.replace(color, "");
+        rainbow = rainbow.replace(chatFormat, "");
       }
     }
     final var colors = this.createRainbow(rainbow.length(), saturation);
@@ -247,8 +266,8 @@ public final class ColorManager {
    * @return {@code this} for builder chain.
    */
   @NotNull
-  public ColorManager withColor(@NotNull final String id, @NotNull final String color) {
-    this.colors.put(id, color);
+  public ColorManager withColorPattern(@NotNull final String id, @NotNull final String color) {
+    this.customColorPatterns.put(id, color);
     return this;
   }
 
@@ -299,8 +318,8 @@ public final class ColorManager {
    * @return {@code this} for builder chain.
    */
   @NotNull
-  public ColorManager withoutColor(@NotNull final String id) {
-    this.colors.remove(id);
+  public ColorManager withoutCustomColorPattern(@NotNull final String id) {
+    this.customColorPatterns.remove(id);
     return this;
   }
 

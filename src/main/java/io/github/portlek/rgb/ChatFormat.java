@@ -164,6 +164,7 @@ public enum ChatFormat {
    * the hex code.
    */
   @Getter
+  @Nullable
   private String hexCode;
 
   /**
