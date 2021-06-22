@@ -164,6 +164,7 @@ public enum ChatFormat {
    * the hex code.
    */
   @Getter
+  @Nullable
   private String hexCode;
 
   /**
@@ -197,7 +198,7 @@ public enum ChatFormat {
   ChatFormat(final int networkId, final char character) {
     this.networkId = networkId;
     this.character = character;
-    this.chatFormat = "\u00a7" + character;
+    this.chatFormat = new String(new char[]{Legacy.COLOR_CHAR, character});
   }
 
   /**

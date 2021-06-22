@@ -28,20 +28,42 @@ package io.github.portlek.rgb;
 import io.github.portlek.rgb.formatters.BukkitFormatter;
 import io.github.portlek.rgb.formatters.CMIFormatter;
 import io.github.portlek.rgb.formatters.HtmlFormatter;
+import io.github.portlek.rgb.formatters.RainbowFormatter;
 import io.github.portlek.rgb.formatters.UnnamedFormatter;
 import io.github.portlek.rgb.gradients.CMIGradient;
 import io.github.portlek.rgb.gradients.HtmlGradient;
 import io.github.portlek.rgb.gradients.IridescentGradient;
 import io.github.portlek.rgb.gradients.KyoriGradient;
-import java.util.ArrayList;
+import java.awt.Color;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represent color managers.
  */
 public final class ColorManager {
+
+  public static void main(final String[] args) {
+    final var test = "{#black}";
+    var text = ColorManager.getDefault().convertToBukkitFormat(test).replace("§", "&");
+    final var compile = Pattern.compile("(([&§])x)((([&§])[0-9A-Fa-f]){6})");
+    final var matcher = compile.matcher(text);
+    while (matcher.find()) {
+      final var hexCode = matcher.group(3).replace("&", "");
+      final var code = ColorManager.getDefault().getCustomColorPattern(hexCode)
+        .orElse(hexCode);
+      text = text.replace(matcher.group(), "{#" + code + "}");
+    }
+    System.out.println(text);
+  }
 
   /**
    * the default.
@@ -54,14 +76,43 @@ public final class ColorManager {
   private static final Pattern DEFAULT_PATTERN = Pattern.compile("#[0-9a-fA-F]{6}");
 
   /**
+   * the special colors.
+   */
+  private static final Collection<ChatFormat> SPECIAL_COLORS = Set.of(
+    ChatFormat.BOLD,
+    ChatFormat.UNDERLINE,
+    ChatFormat.ITALIC,
+    ChatFormat.OBFUSCATED,
+    ChatFormat.STRIKETHROUGH);
+
+  /**
+   * the custom color patterns.
+   * <p>
+   * the pattern is {@literal {#hex-code}}.
+   */
+  private final Map<String, String> customColorPatterns = new HashMap<>();
+
+  /**
+   * the custom color patterns.
+   * <p>
+   * the pattern is {@literal {#colod-code}}.
+   */
+  private final Map<String, String> customColorPatternsReversed = new HashMap<>();
+
+  /**
    * the formatters.
    */
-  private final Collection<Formatter> formatters = new ArrayList<>();
+  private final Collection<Formatter> formatters = new HashSet<>();
 
   /**
    * the gradients.
    */
-  private final Collection<Gradient> gradients = new ArrayList<>();
+  private final Collection<Gradient> gradients = new HashSet<>();
+
+  /**
+   * the rgb supported.
+   */
+  private boolean rgbSupported = true;
 
   /**
    * checks if the text contains legacy code.
@@ -72,10 +123,9 @@ public final class ColorManager {
    * @return {@code true} if the text contains legacy code.
    */
   public static boolean containsLegacyCode(@NotNull final String text, final int code) {
-    if (text.length() - code < 9 || text.charAt(code + 7) != '|') {
-      return false;
-    }
-    return ChatFormat.getByChar(text.charAt(code + 8)).isPresent();
+    return text.length() - code >= 9 &&
+      text.charAt(code + 7) == '|' &&
+      ChatFormat.getByChar(text.charAt(code + 8)).isPresent();
   }
 
   /**
@@ -85,7 +135,7 @@ public final class ColorManager {
    */
   @NotNull
   public static ColorManager createDefault() {
-    return new ColorManager()
+    final var colorManger = new ColorManager()
       .withFormatter(BukkitFormatter.INSTANCE)
       .withFormatter(CMIFormatter.INSTANCE)
       .withFormatter(HtmlFormatter.INSTANCE)
@@ -94,6 +144,7 @@ public final class ColorManager {
       .withGradient(HtmlGradient.INSTANCE)
       .withGradient(IridescentGradient.INSTANCE)
       .withGradient(KyoriGradient.INSTANCE);
+    return colorManger.withFormatter(RainbowFormatter.of(colorManger));
   }
 
   /**
@@ -165,13 +216,12 @@ public final class ColorManager {
    * converts the text to bukkit format.
    *
    * @param text the text to convert.
-   * @param rgbSupported the rgb supported to convert.
    *
    * @return converted text.
    */
   @NotNull
-  public String convertToBukkitFormat(@NotNull final String text, final boolean rgbSupported) {
-    if (!rgbSupported) {
+  public String convertToBukkitFormat(@NotNull final String text) {
+    if (!this.rgbSupported) {
       return ChatComponent.fromColoredText(text).toLegacyText();
     }
     var replaced = this.applyFormats(text, false);
@@ -185,9 +235,98 @@ public final class ColorManager {
         "&" + hexCode.charAt(4) +
         "&" + hexCode.charAt(5) +
         "&" + hexCode.charAt(6);
-      replaced = replaced.replace(hexCode, fixed.replace('&', '\u00a7'));
+      replaced = replaced.replace(hexCode, fixed.replace('&', Legacy.COLOR_CHAR));
     }
     return replaced;
+  }
+
+  /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public Optional<String> getCustomColorPattern(@NotNull final String hexCode) {
+    return Optional.ofNullable(this.customColorPatterns.get(hexCode));
+  }
+
+  /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public String getCustomColorPatternOrThrow(@NotNull final String hexCode) {
+    return this.getCustomColorPattern(hexCode).orElseThrow();
+  }
+
+  /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public Optional<String> getCustomColorPatternReversed(@NotNull final String hexCode) {
+    return Optional.ofNullable(this.customColorPatternsReversed.get(hexCode));
+  }
+
+  /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public String getCustomColorPatternReversedOThrow(@NotNull final String hexCode) {
+    return this.getCustomColorPatternReversed(hexCode).orElseThrow();
+  }
+
+  /**
+   * rainbows the text.
+   *
+   * @param text the text to rainbow.
+   * @param saturation the saturation to rainbow.
+   *
+   * @return rainbow text.
+   */
+  @NotNull
+  public String rainbow(@NotNull final String text, final float saturation) {
+    var rainbow = text;
+    final var builder = new StringBuilder();
+    for (final var color : ColorManager.SPECIAL_COLORS) {
+      final var chatFormat = color.getChatFormat();
+      if (rainbow.contains(chatFormat)) {
+        builder.append(color);
+        rainbow = rainbow.replace(chatFormat, "");
+      }
+    }
+    final var colors = this.createRainbow(rainbow.length(), saturation);
+    final var characters = rainbow.split("");
+    return IntStream.range(0, rainbow.length())
+      .mapToObj(i -> this.convertToBukkitFormat(colors[i].getHexCode()) + builder + characters[i])
+      .collect(Collectors.joining());
+  }
+
+  /**
+   * registers a custom color.
+   *
+   * @param hexCode the hex code to register.
+   * @param color the color to register.
+   *
+   * @return {@code this} for builder chain.
+   */
+  @NotNull
+  public ColorManager withCustomColorPattern(@NotNull final String hexCode, @NotNull final String color) {
+    this.customColorPatterns.put(hexCode, color);
+    this.customColorPatternsReversed.remove(color, hexCode);
+    return this;
   }
 
   /**
@@ -217,6 +356,35 @@ public final class ColorManager {
   }
 
   /**
+   * sets the rgb supported.
+   *
+   * @param rgbSupported the rgb supported to set.
+   *
+   * @return {@code this} for builder chain.
+   */
+  @NotNull
+  public ColorManager withRgbSupport(final boolean rgbSupported) {
+    this.rgbSupported = rgbSupported;
+    return this;
+  }
+
+  /**
+   * unregisters a custom color.
+   *
+   * @param hexCode the hex code to unregister.
+   *
+   * @return {@code this} for builder chain.
+   */
+  @NotNull
+  public ColorManager withoutCustomColorPattern(@NotNull final String hexCode) {
+    final var remove = this.customColorPatterns.remove(hexCode);
+    if (remove != null) {
+      this.customColorPatternsReversed.remove(remove);
+    }
+    return this;
+  }
+
+  /**
    * unregisters the formatter.
    *
    * @param formatter the formatter to unregisters.
@@ -240,5 +408,28 @@ public final class ColorManager {
   public ColorManager withoutGradient(@NotNull final Gradient gradient) {
     this.gradients.add(gradient);
     return this;
+  }
+
+  /**
+   * creates rainbow.
+   *
+   * @param step the step to create.
+   * @param saturation the saturation to create.
+   *
+   * @return created rainbow.
+   */
+  @NotNull
+  private TextColor[] createRainbow(final int step, final float saturation) {
+    final var colors = new TextColor[step];
+    final var colorStep = 1.00 / step;
+    for (var i = 0; i < step; i++) {
+      final var color = Color.getHSBColor((float) (colorStep * i), saturation, saturation);
+      if (this.rgbSupported) {
+        colors[i] = TextColor.of(color);
+      } else {
+        colors[i] = TextColor.of(TextColor.getClosestColor(color));
+      }
+    }
+    return colors;
   }
 }

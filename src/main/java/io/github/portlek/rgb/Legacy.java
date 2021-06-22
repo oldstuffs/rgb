@@ -34,6 +34,11 @@ import org.jetbrains.annotations.NotNull;
 public final class Legacy {
 
   /**
+   * the color char.
+   */
+  public static final char COLOR_CHAR = '\u00a7';
+
+  /**
    * the magic codes 1.
    */
   private static final String MAGIC_CODES_1 = "0123456789AaBbCcDdEeFfRr";
@@ -70,7 +75,7 @@ public final class Legacy {
     IntStream.range(0, chars.length - 1)
       .filter(i -> chars[i] == '&' && Legacy.MAGIC_CODES_3.indexOf(chars[i + 1]) > -1)
       .forEach(i -> {
-        chars[i] = '\u00a7';
+        chars[i] = Legacy.COLOR_CHAR;
         chars[i + 1] = Character.toLowerCase(chars[i + 1]);
       });
     return new String(chars);
@@ -89,14 +94,14 @@ public final class Legacy {
     final var length = text.length();
     for (var index = length - 1; index > -1; index--) {
       final var section = text.charAt(index);
-      if (section != '\u00a7' && section != '&' || index >= length - 1) {
+      if (section != Legacy.COLOR_CHAR && section != '&' || index >= length - 1) {
         continue;
       }
       final var c = text.charAt(index + 1);
       if (!Legacy.MAGIC_CODES_2.contains(String.valueOf(c))) {
         continue;
       }
-      builder.insert(0, "\u00a7" + c);
+      builder.insert(0, Legacy.COLOR_CHAR + c);
       if (Legacy.MAGIC_CODES_1.contains(String.valueOf(c))) {
         break;
       }
