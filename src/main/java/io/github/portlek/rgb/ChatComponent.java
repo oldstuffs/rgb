@@ -316,7 +316,10 @@ public final class ChatComponent {
    */
   @NotNull
   public static ChatComponent optimizedComponent(@NotNull final String text) {
-    if (text.contains("#") || text.contains("&x") || text.contains(Legacy.COLOR_CHAR + "x")) {
+    if (text.contains("#") ||
+      text.contains("&x") ||
+      text.contains(Legacy.COLOR_CHAR + "x") ||
+      text.contains("<rainbow")) {
       return ChatComponent.fromColoredText(text);
     }
     return new ChatComponent(text);

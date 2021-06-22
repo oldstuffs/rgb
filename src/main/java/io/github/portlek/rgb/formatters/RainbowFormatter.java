@@ -43,11 +43,6 @@ import org.jetbrains.annotations.NotNull;
 public final class RainbowFormatter implements Formatter {
 
   /**
-   * the instance.
-   */
-  public static final Formatter INSTANCE = new RainbowFormatter();
-
-  /**
    * the pattern.
    */
   private static final Pattern PATTERN = Pattern.compile("<rainbow([0-9]{1,3})>(.*?)</rainbow>");
@@ -57,13 +52,6 @@ public final class RainbowFormatter implements Formatter {
    */
   @NotNull
   private final ColorManager colorManager;
-
-  /**
-   * ctor.
-   */
-  private RainbowFormatter() {
-    this(ColorManager.getDefault());
-  }
 
   /**
    * creates a rainbow formatter.
@@ -80,6 +68,9 @@ public final class RainbowFormatter implements Formatter {
   @NotNull
   @Override
   public String apply(@NotNull final String text) {
+    if (!text.contains("<rainbow")) {
+      return text;
+    }
     var replaced = text;
     final var matcher = RainbowFormatter.PATTERN.matcher(replaced);
     while (matcher.find()) {

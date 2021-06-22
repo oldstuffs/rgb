@@ -51,6 +51,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ColorManager {
 
+  public static void main(final String[] args) {
+    final var test = "{#black}";
+    var text = ColorManager.getDefault().convertToBukkitFormat(test).replace("§", "&");
+    final var compile = Pattern.compile("(([&§])x)((([&§])[0-9A-Fa-f]){6})");
+    final var matcher = compile.matcher(text);
+    while (matcher.find()) {
+      final var hexCode = matcher.group(3).replace("&", "");
+      final var code = ColorManager.getDefault().getCustomColorPattern(hexCode)
+        .orElse(hexCode);
+      text = text.replace(matcher.group(), "{#" + code + "}");
+    }
+    System.out.println(text);
+  }
+
   /**
    * the default.
    */
@@ -77,6 +91,13 @@ public final class ColorManager {
    * the pattern is {@literal {#hex-code}}.
    */
   private final Map<String, String> customColorPatterns = new HashMap<>();
+
+  /**
+   * the custom color patterns.
+   * <p>
+   * the pattern is {@literal {#colod-code}}.
+   */
+  private final Map<String, String> customColorPatternsReversed = new HashMap<>();
 
   /**
    * the formatters.
@@ -232,6 +253,42 @@ public final class ColorManager {
   }
 
   /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public String getCustomColorPatternOrThrow(@NotNull final String hexCode) {
+    return this.getCustomColorPattern(hexCode).orElseThrow();
+  }
+
+  /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public Optional<String> getCustomColorPatternReversed(@NotNull final String hexCode) {
+    return Optional.ofNullable(this.customColorPatternsReversed.get(hexCode));
+  }
+
+  /**
+   * gets the color pattern.
+   *
+   * @param hexCode the hex code to get.
+   *
+   * @return color.
+   */
+  @NotNull
+  public String getCustomColorPatternReversedOThrow(@NotNull final String hexCode) {
+    return this.getCustomColorPatternReversed(hexCode).orElseThrow();
+  }
+
+  /**
    * rainbows the text.
    *
    * @param text the text to rainbow.
@@ -266,8 +323,9 @@ public final class ColorManager {
    * @return {@code this} for builder chain.
    */
   @NotNull
-  public ColorManager withColorPattern(@NotNull final String hexCode, @NotNull final String color) {
+  public ColorManager withCustomColorPattern(@NotNull final String hexCode, @NotNull final String color) {
     this.customColorPatterns.put(hexCode, color);
+    this.customColorPatternsReversed.remove(color, hexCode);
     return this;
   }
 
@@ -319,7 +377,10 @@ public final class ColorManager {
    */
   @NotNull
   public ColorManager withoutCustomColorPattern(@NotNull final String hexCode) {
-    this.customColorPatterns.remove(hexCode);
+    final var remove = this.customColorPatterns.remove(hexCode);
+    if (remove != null) {
+      this.customColorPatternsReversed.remove(remove);
+    }
     return this;
   }
 
